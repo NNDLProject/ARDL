@@ -161,7 +161,89 @@ def get_vocab_using_glove(dim):
   print("Vocabulary size [GloVe]: ", len(vocab))
   return vocab, None
 
-def get_batch(df, i, batch_size, vocab, emb, word2index):
+def get_word_idx_using_glove(dim):
+  """ Function to get vocabulary using GloVe Embeddings
+  dim can take a value from 50, 100, 200, 300"""
+
+  vocab = {}
+  word2idx = {}
+  words = []
+  with open("/content/drive/MyDrive/Github/glove.6B.{}d.txt".format(dim), 'r') as f:
+    for i, line in enumerate(f):
+      values = line.split()
+      word = values[0]
+      word2idx[word] = i
+      vector = np.asarray(values[1:], "float32")
+      words.append(word)
+      vocab[word] = vector
+
+  print("Vocabulary size [GloVe]: ", len(vocab))
+  return words, word2idx, vocab
+
+def create_glove_embedding_matrix(words, glove, glove_dim=50):
+
+  matrix_len = len(words)
+
+  weights_matrix = np.zeros((matrix_len, glove_dim))
+
+  for i, word in enumerate(words):
+      try: 
+          weights_matrix[i] = glove[word]
+      except KeyError:
+          weights_matrix[i] = np.random.normal(scale=0.6, size=(glove_dim, ))
+
+  return weights_matrix
+
+def create_inp_data_and_weights(train_data, test_data, glove_dim=50, max_size=500):
+  input_vocab, input_word2index = get_vocab_using_bow(train_data, test_data)
+  input_words = list(input_vocab.keys())
+  glove_words, glove_word2idx, glove_vocab = get_word_idx_using_glove(glove_dim)
+
+  weight_matrix = create_glove_embedding_matrix(input_vocab, glove_vocab, glove_dim)
+
+  final_data = {}
+  for stage in ['train', 'test']:
+    results = []
+
+    if stage == "train":
+      texts = train_data.data
+      categories = train_data.target
+    else:
+      texts = test_data.data
+      categories = test_data.target
+
+
+    ohc = np.zeros((len(texts), max_size, 1))
+    for sample_no, text in enumerate(texts):
+      text = clean(text)
+      count = 0
+      for word_no, word in enumerate(text.split(' ')):
+        if word in input_word2index:
+          ohc[sample_no][count][0] = input_word2index[word]
+          count += 1
+        if count == max_size:
+          break
+
+    for category in categories:
+      index_y = dict_categories[category]
+      results.append(index_y)
+
+    final_data[stage] = {
+      "data": np.array(ohc),
+      "target": np.array(results)
+    }
+    
+  return weight_matrix, final_data
+
+
+def get_batch(df, i, batch_size):
+
+  texts = df['data'][i*batch_size : i*batch_size+batch_size]
+  categories = df['target'][i*batch_size : i*batch_size+batch_size]
+
+  return texts, categories
+
+def get_batch_deprecated(df, i, batch_size, vocab, emb, word2index):
   """ Function to convert text into embeddings for a batch of data 
   emb can take values "bow", "gloveGEN" and "gloveLSTM" correspoding 
   to Bag of words model, GloVe embeddings (one vector per paragraph) and
