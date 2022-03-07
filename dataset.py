@@ -168,7 +168,7 @@ def get_word_idx_using_glove(dim):
   vocab = {}
   word2idx = {}
   words = []
-  with open("/content/drive/MyDrive/Github/glove.6B.{}d.txt".format(dim), 'r') as f:
+  with open("glove.6B.{}d.txt".format(dim), 'r') as f:
     for i, line in enumerate(f):
       values = line.split()
       word = values[0]
