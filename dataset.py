@@ -97,6 +97,8 @@ dict_categories = {0: 0,
 
 def clean(text):
   """ Function to clean the text """
+  text = text.lower()
+
   text = re.sub(r'^https?:\/\/.*[\r\n]*', '', text, flags=re.MULTILINE)
   texter = re.sub(r"<br />", " ", text)
   texter = re.sub(r"&quot;", "\"",texter)
@@ -115,8 +117,10 @@ def clean(text):
   clean = re.compile('<.*?>')
   texter = texter.encode('ascii', 'ignore').decode('ascii')
   texter = re.sub(clean, '', texter)
+  texter = re.sub(r'[^\w\s]', '', texter)
   if texter == "":
     texter = ""
+  
   return texter
 
 def get_word_2_index(vocab):
