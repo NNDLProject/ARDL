@@ -4,7 +4,7 @@ import torch.nn.functional as F
 import numpy as np
 
 class DNN(nn.Module):
-    def __init__(self, input_dim, hidden_layers, hidden_dim, output_dim=20, dropout=0.5):
+    def __init__(self, input_dim, hidden_layers, hidden_dim, output_dim=20, dropout=0.3):
         super(DNN, self).__init__()
         self.hidden_layers = hidden_layers
         self.fc1 = nn.Linear(input_dim, hidden_dim)
