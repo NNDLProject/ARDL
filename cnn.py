@@ -17,7 +17,7 @@ class CNN(nn.Module):
 
         layers = []
         
-        in_channels = 500
+        in_channels = emb_dim
         
         for i in range(self.n_layers):
 
@@ -46,6 +46,7 @@ class CNN(nn.Module):
         batch_size = x.size(0)
         x = self.embedding(x)
         x = x.squeeze(2)
+        x = x.permute(0, 2, 1)
         x = self.conv_layers(x)
         x = self.flatten(x)
         x = F.relu(self.fc1(x))
