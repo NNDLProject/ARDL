@@ -6,7 +6,7 @@ import torchvision
 import numpy as np
 
 class LSTM(nn.Module):
-    def __init__(self, input_size, emb_dim, output_size, hidden_dim, n_layers, emb_weights=None):
+    def __init__(self, input_size, emb_dim, output_size, hidden_dim, n_layers, emb_weights=None, max_len=500):
         super(LSTM, self).__init__()
         self.embedding = nn.Embedding(input_size, emb_dim)
         
@@ -18,7 +18,7 @@ class LSTM(nn.Module):
         self.n_layers = n_layers
         self.lstm = nn.LSTM(emb_dim, hidden_dim, n_layers, dropout=0.5, batch_first=True)
         
-        self.fc = nn.Linear(hidden_dim*500, output_size)
+        self.fc = nn.Linear(hidden_dim*max_len, output_size)
     
     def forward(self, x):
         
