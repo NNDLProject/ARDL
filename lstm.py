@@ -22,12 +22,15 @@ class LSTM(nn.Module):
         self.att = nn.Linear(hidden_dim*500, output_size)
     
     def forward(self, x):
+
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
         
         batch_size = x.size(0)
         x = self.embedding(x)
 
-        h0 = torch.zeros(self.n_layers, x.size(0), self.hidden_dim)
-        c0 = torch.zeros(self.n_layers, x.size(0), self.hidden_dim)
+        h0 = torch.zeros(self.n_layers, x.size(0), self.hidden_dim).to(device)
+        c0 = torch.zeros(self.n_layers, x.size(0), self.hidden_dim).to(device)
         x = x.squeeze(2)
         out, _ = self.lstm(x, (h0, c0))
         out = out.reshape(out.shape[0], -1)
