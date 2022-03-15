@@ -6,6 +6,7 @@ import torchvision
 import numpy as np
 
 class LSTM(nn.Module):
+    """ Class for LSTM module """
     def __init__(self, input_size, emb_dim, output_size, hidden_dim, n_layers, emb_weights=None):
         super(LSTM, self).__init__()
         self.embedding = nn.Embedding(input_size, emb_dim)
@@ -22,7 +23,7 @@ class LSTM(nn.Module):
         self.att = nn.Linear(hidden_dim*500, output_size)
     
     def forward(self, x):
-
+        """ Function to implement forward pass """
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
         
@@ -42,13 +43,14 @@ class LSTM(nn.Module):
 
 
 def build_random_lstm(min_hidden_layer_lstm, max_hidden_layer_lstm, min_nodes_lstm, max_nodes_lstm, input_size, emb_dim, output_size, emb_weights):
-
+    """ Function to build a random LSTM """"
     values = list(range(min_nodes_lstm,max_nodes_lstm))
     values_layer = list(range(min_hidden_layer_lstm,max_hidden_layer_lstm))
 
     hidden_dim = np.random.choice(values)
     hidden_layers = np.random.choice(values_layer)
     
+    # Build model
     model = LSTM(input_size, emb_dim, output_size, hidden_dim, hidden_layers, emb_weights)
 
 
