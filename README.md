@@ -14,4 +14,4 @@ To train CNN, DNN and LSTM use test_CNN.ipynb, test_DNN.ipynb and test_LSTM.ipyn
 The main architecture of final attention model lies in attention.ipynb alongwith it's training and testing.
 
 ### The folder structure for models and Glove embeddings is as follows
-![files](images:file.png)
+![files](file.png)
