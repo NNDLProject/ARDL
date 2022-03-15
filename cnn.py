@@ -4,6 +4,7 @@ import torch
 import numpy as np
 
 class CNN(nn.Module):
+    """ Class for CNN """
     def __init__(self, input_size, emb_dim, output_size, filter_sizes, emb_weights=None):
         super(CNN, self).__init__()
         self.embedding = nn.Embedding(input_size, emb_dim)
@@ -42,7 +43,7 @@ class CNN(nn.Module):
         self.att = nn.Linear(256, output_size)
     
     def forward(self, x):
-        
+        """ Function to implement forward pass """
         batch_size = x.size(0)
         x = self.embedding(x)
         x = x.squeeze(2)
@@ -61,7 +62,7 @@ class CNN(nn.Module):
 
 
 def build_random_cnn(min_hidden_layer_cnn, max_hidden_layer_cnn, min_nodes_cnn, max_nodes_cnn, input_size, emb_dim, output_size, emb_weights):
-
+    """ Function to build a random CNN """
     values = list(range(min_nodes_cnn,max_nodes_cnn))
     values_layer = list(range(min_hidden_layer_cnn,max_hidden_layer_cnn))
 
@@ -72,7 +73,7 @@ def build_random_cnn(min_hidden_layer_cnn, max_hidden_layer_cnn, min_nodes_cnn, 
     for i in range(hidden_layers):
       filter_sizes.append(np.random.choice(values))
 
-    
+    # Build model
     model = CNN(input_size, emb_dim, output_size, filter_sizes, emb_weights)
 
     return model
