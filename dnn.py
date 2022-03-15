@@ -4,6 +4,7 @@ import torch.nn.functional as F
 import numpy as np
 
 class DNN(nn.Module):
+    """ Class for DNN module """
     def __init__(self, input_size, emb_dim, emb_weights, hidden_layers, hidden_dims, output_dim=20, dropout=0.3, max_len=500):
         super(DNN, self).__init__()
         self.embedding = nn.Embedding(input_size, emb_dim)
@@ -27,6 +28,7 @@ class DNN(nn.Module):
         self.dropout = nn.Dropout(dropout)
         
     def forward(self, x):
+        """ Function to implement forward pass """
         x = self.embedding(x)
         x = x.squeeze(2)
         x = x.view(-1, x.shape[1]*x.shape[2])
@@ -47,7 +49,7 @@ class DNN(nn.Module):
         return a, F.log_softmax(y)
 
 def build_random_dnn(input_dim, emb_dim, emb_weights, min_hidden_layer, max_hidden_layer, min_nodes, max_nodes, output_dim, dropout=0.3):
-
+    """ Function to build a random DNN """
     layer = list(range(min_hidden_layer,max_hidden_layer))
     node = list(range(min_nodes, max_nodes))
 
@@ -55,7 +57,8 @@ def build_random_dnn(input_dim, emb_dim, emb_weights, min_hidden_layer, max_hidd
     num_nodes = []
     for layer in range(num_layers):
       num_nodes.append(np.random.choice(node))
-
+    
+    # Build model
     dnn = DNN(input_dim, emb_dim, emb_weights, num_layers, num_nodes, output_dim, dropout)
 
     return dnn
