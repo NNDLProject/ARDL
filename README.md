@@ -7,6 +7,8 @@ PyTorch implementation of the ARDL model which is meant to be a flexible framewo
 
 For running the code you will need to first download the glove embeddings from https://nlp.stanford.edu/projects/glove/ into the root folder.
 
+The dataset.py file contains all the utils to preprocess the dataset that is currently twenty newsgroup
+
 Main structure of CNN, DNN and LSTM lies in cnn.py, dnn.py and lstm.py respectively.
 
 To train CNN, DNN and LSTM use test_CNN.ipynb, test_DNN.ipynb and test_LSTM.ipynb notebooks as reference.
